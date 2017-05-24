@@ -1,0 +1,140 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SDiZO_2.Graphs
+{
+    class GraphHeap
+    {
+        /*
+        * Kopiec oparty na tablicy tablic, tzw. "jagged array". Tablice mają stały rozmiar 3.
+        * [0] - początkowy wierzchołek
+        * [1] - końcowy wierzchołek
+        * [2] - waga
+        * Te małe tablice zawierają wszystkie informacje o krawędziach. Możliwe że nie jest to optymalny sposób.
+        * Zdecydowałem się zastosować tablice zamiast obiektów ze względu na szybkość porównywania wartości znając indeksy.
+        * Kopiec bazuje na strukturze jaką stworzyłem w pierwszym projekcie.
+        */
+        private int popamount = 0;
+        public int[][] Array { get; private set; }
+
+        public GraphHeap()
+        {
+            Array = new int[0][];
+        }
+
+        // Dodawanie nowej krawędzi do kopca.
+        public void Insert(int parent, int child, int weight)
+        {
+            int[][] newArray = new int[Array.Length + 1][];
+            for (int i = 0; i < Array.Length; i++)
+            {
+                newArray[i] = Array[i];
+            }
+
+            newArray[newArray.Length - 1] = new int[] { parent, child, weight };
+            Array = newArray;
+
+            int index = (Array.Length - 1);
+            while (index > 0 && Array[(index - 1) / 2][2] > Array[index][2])
+            {
+                int[] swap = Array[(index - 1) / 2];
+                Array[(index - 1) / 2] = Array[index];
+                Array[index] = swap;
+                index = (index - 1) / 2;
+            }
+
+        }
+
+        // Wyciąganie krawędzi o najmniejszej wadze.
+        public int[] Pop()
+        {
+            popamount++;
+            int[] edge = Array[0];
+            Array[0] = Array[Array.Length - 1];
+
+            int[][] newArray = new int[Array.Length - 1][];
+            for (int i = 0; i < Array.Length - 1; i++)
+            {
+                newArray[i] = Array[i];
+            }
+            Array = newArray;
+            // Sortowanie w celu zachowania warunku kopca.
+            int index = 0;
+            int lChildIndex = 2 * index + 1;
+            int rChildIndex = 2 * index + 2;
+            bool done = false;
+            int[] swap;
+            while (!done)
+            {
+                if (rChildIndex < Array.Length && lChildIndex < Array.Length)
+                {
+                    if (Array[rChildIndex][2] < Array[index][2] || Array[lChildIndex][2] < Array[index][2])
+                    {
+                        if (Array[rChildIndex][2] < Array[lChildIndex][2])
+                        {
+                            swap = Array[index];
+                            Array[index] = Array[rChildIndex];
+                            Array[rChildIndex] = swap;
+                            index = rChildIndex;
+                        }
+                        else
+                        {
+                            swap = Array[index];
+                            Array[index] = Array[lChildIndex];
+                            Array[lChildIndex] = swap;
+                            index = lChildIndex;
+                        }
+
+                    }
+                    else
+                    {
+                        done = true;
+                    }
+
+                }
+                else
+                {
+                    if (lChildIndex < Array.Length)
+                    {
+                        if (Array[lChildIndex][2] < Array[index][2])
+                        {
+                            swap = Array[index];
+                            Array[index] = Array[lChildIndex];
+                            Array[lChildIndex] = swap;
+                            index = lChildIndex;
+                        }
+                        else
+                        {
+                            done = true;
+                        }
+                    }
+                    else
+                    {
+                        done = true;
+                    }
+
+                }
+
+                lChildIndex = 2 * index + 1;
+                rChildIndex = 2 * index + 2;
+            }
+
+            return edge;
+        }
+
+        // Wielkość kopca.
+        public int Size()
+        {
+            return Array.Length;
+        }
+
+        // Czyszczenie kopca.
+        public void Clear()
+        {
+            Array = new int[0][];
+        }
+    }
+}

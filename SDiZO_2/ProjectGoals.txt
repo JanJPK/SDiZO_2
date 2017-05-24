@@ -1,0 +1,29 @@
+﻿Implementacja i pomiar czasu algorytmów grafowych:
+	a) Wyznaczanie minimalnego drzewa rozpinającego (MST)
+		- algorytm Kruskala
+		- algorytm Prima
+
+	b) Wyznaczanie najkrószej ścieżki w grafie
+		- algorytm Dijkstry
+		- algorytm Bellmana-Forda
+
+Założenia:
+	a) Struktury alokowane dynamicznie
+	b) Waga krawędzie jest typu integer
+	c) Testy dokonać dla różnej gęstości grafu i wielkości
+		- gęstość grafu to stosunek liczby krawędzi do największej możliwej liczby krawędzi. 
+			gęstość = 2m / n(n - 1)
+				gdzie m - liczba krawędzi; n - liczba wierzchołków
+
+
+			badane gęstości - 25%, 50%, 75% i 99%
+
+	d) Możliwość sprawdzenia poprawności struktury
+
+Funkcje i wyświetlanie wyników:
+	a) Algorytm X macierzowo lub listowo z wyświetleniem wyników
+	b) MST - lista krawędzi drzewa rozpinającego oraz suma wag krawędzi
+	c) Najkrótsza droga - długość drogi z wierzchołka początkowego oraz droga w postaci sekwencji wierzchołków
+
+Celuje w ocenę 4.5 - dwa algorytmy dla każdego problemu + zakaz używania STL. 
+	Jak starczy czasu - może postaram się zaimplementować algorytm przepływu Forda-Fulkersona na 5.0/5.5 w głąb/głąb+wszerz.
