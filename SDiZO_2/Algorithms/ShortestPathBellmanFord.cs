@@ -54,7 +54,7 @@ namespace SDiZO_2.Algorithms
         }
 
         // Relaksacja - znajdywanie coraz lepszych rozwiązań (tutaj mniejszych wag) aż do znalezienia optimum.
-        private void Relaxation()
+        private bool Relaxation()
         {
             /*
              * Przeglądamy wszystkie krawędzie.
@@ -78,8 +78,10 @@ namespace SDiZO_2.Algorithms
              * cykl ujemny występuje w grafie.
              *
              */
+            bool changes = false;
             for (int j = 0; j < graph.VertexAmount; j++)
             {
+                //changes = false;
                 if (ListMode)
                 {
 
@@ -99,6 +101,7 @@ namespace SDiZO_2.Algorithms
                         {
                             array[0, node.TargetVertex] = node.Value + array[0, j];
                             array[1, node.TargetVertex] = j;
+                            changes = true;
                         }
                         node = node.Next;
                     }
@@ -120,12 +123,13 @@ namespace SDiZO_2.Algorithms
                             {
                                 array[0, i] = graph.Matrix[j, i] + array[0, j];
                                 array[1, i] = j;
+                                changes = true;
                             }
                         }
                     }
                 }
             }
-               
+            return changes;
         }
 
         // Szukanie ujemnego cyklu.
@@ -172,11 +176,16 @@ namespace SDiZO_2.Algorithms
             // Zerowy koszt dojścia do wierzchołka startowego.
             array[0, startVertex] = 0;
             // "specjalna" wartość tak by odróżnić wierzchołek startowy od innych (które mają -1).
-            array[1, startVertex] = -2; 
+            array[1, startVertex] = -2;
 
+            bool changes;
             for (int i = 0; i < graph.VertexAmount; i++)
             {
-                Relaxation();
+                changes = Relaxation();
+                if (changes == false)
+                {
+                    break;
+                }
             }
             FindNegativeCycle();
         }

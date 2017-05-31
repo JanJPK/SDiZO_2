@@ -90,22 +90,19 @@ namespace SDiZO_2.Algorithms
         // Praca.
         public void Work()
         {
-            int[] currentEdge;
-            // currentEdge - minitablica którymi posługuje się kopiec.
-            // [0] - początkowy wierzchołek.
-            // [1] - końcowy wierzchołek.
+            Edge currentEdge;
             // Tak długo aż nie wypełnisz całej tablicy:
             for(int i = 0; i < parentVertexes.Length;)
             {
                 currentEdge = heap.Pop();
                 // Pobierz wartość z początku kolejki.
                 // Jeżeli nie mamy tej wartości, jej wartość w tablicy bool jest false -> dodaj ją.
-                if (includedVertexes[currentEdge[1]] == false)
+                if (includedVertexes[currentEdge.End] == false)
                 {
-                    includedVertexes[currentEdge[1]] = true;
-                    parentVertexes[i] = currentEdge[0];
-                    childVertexes[i] = currentEdge[1];
-                    AddNeighboursToHeap(currentEdge[1]);
+                    includedVertexes[currentEdge.End] = true;
+                    parentVertexes[i] = currentEdge.Start;
+                    childVertexes[i] = currentEdge.End;
+                    AddNeighboursToHeap(currentEdge.End);
                     i++;
                 }
             }

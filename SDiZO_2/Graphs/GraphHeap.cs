@@ -9,38 +9,32 @@ namespace SDiZO_2.Graphs
     class GraphHeap
     {
         /*
-        * Kopiec oparty na tablicy tablic, tzw. "jagged array". Tablice mają stały rozmiar 3.
-        * [0] - początkowy wierzchołek
-        * [1] - końcowy wierzchołek
-        * [2] - waga
-        * Te małe tablice zawierają wszystkie informacje o krawędziach. Możliwe że nie jest to optymalny sposób.
-        * Zdecydowałem się zastosować tablice zamiast obiektów ze względu na szybkość porównywania wartości znając indeksy.
-        * Kopiec bazuje na strukturze jaką stworzyłem w pierwszym projekcie.
-        */
+         * Kopiec bazuje na strukturze jaką stworzyłem w pierwszym projekcie.
+         */
         private int popamount = 0;
-        public int[][] Array { get; private set; }
+        public Edge[] Array { get; private set; }
 
         public GraphHeap()
         {
-            Array = new int[0][];
+            Array = new Edge[0];
         }
 
         // Dodawanie nowej krawędzi do kopca.
         public void Insert(int parent, int child, int weight)
         {
-            int[][] newArray = new int[Array.Length + 1][];
+            Edge[] newArray = new Edge[Array.Length + 1];
             for (int i = 0; i < Array.Length; i++)
             {
                 newArray[i] = Array[i];
             }
 
-            newArray[newArray.Length - 1] = new int[] { parent, child, weight };
+            newArray[newArray.Length - 1] = new Edge(parent, child, weight);
             Array = newArray;
 
             int index = (Array.Length - 1);
-            while (index > 0 && Array[(index - 1) / 2][2] > Array[index][2])
+            while (index > 0 && Array[(index - 1) / 2].Weight > Array[index].Weight)
             {
-                int[] swap = Array[(index - 1) / 2];
+                Edge swap = Array[(index - 1) / 2];
                 Array[(index - 1) / 2] = Array[index];
                 Array[index] = swap;
                 index = (index - 1) / 2;
@@ -49,13 +43,13 @@ namespace SDiZO_2.Graphs
         }
 
         // Wyciąganie krawędzi o najmniejszej wadze.
-        public int[] Pop()
+        public Edge Pop()
         {
             popamount++;
-            int[] edge = Array[0];
+            Edge edge = Array[0];
             Array[0] = Array[Array.Length - 1];
 
-            int[][] newArray = new int[Array.Length - 1][];
+            Edge[] newArray = new Edge[Array.Length - 1];
             for (int i = 0; i < Array.Length - 1; i++)
             {
                 newArray[i] = Array[i];
@@ -66,14 +60,14 @@ namespace SDiZO_2.Graphs
             int lChildIndex = 2 * index + 1;
             int rChildIndex = 2 * index + 2;
             bool done = false;
-            int[] swap;
+            Edge swap;
             while (!done)
             {
                 if (rChildIndex < Array.Length && lChildIndex < Array.Length)
                 {
-                    if (Array[rChildIndex][2] < Array[index][2] || Array[lChildIndex][2] < Array[index][2])
+                    if (Array[rChildIndex].Weight < Array[index].Weight || Array[lChildIndex].Weight < Array[index].Weight)
                     {
-                        if (Array[rChildIndex][2] < Array[lChildIndex][2])
+                        if (Array[rChildIndex].Weight < Array[lChildIndex].Weight)
                         {
                             swap = Array[index];
                             Array[index] = Array[rChildIndex];
@@ -99,7 +93,7 @@ namespace SDiZO_2.Graphs
                 {
                     if (lChildIndex < Array.Length)
                     {
-                        if (Array[lChildIndex][2] < Array[index][2])
+                        if (Array[lChildIndex].Weight < Array[index].Weight)
                         {
                             swap = Array[index];
                             Array[index] = Array[lChildIndex];
@@ -134,7 +128,22 @@ namespace SDiZO_2.Graphs
         // Czyszczenie kopca.
         public void Clear()
         {
-            Array = new int[0][];
+            Array = new Edge[0];
+        }
+    }
+
+    public class Edge
+    {
+        public int Start { get; set; }
+        public int End { get; set; }
+        public int Weight { get; set; }
+
+        public Edge(int start, int end, int weight)
+        {
+            Start = start;
+            End = end;
+            Weight = weight;
+
         }
     }
 }

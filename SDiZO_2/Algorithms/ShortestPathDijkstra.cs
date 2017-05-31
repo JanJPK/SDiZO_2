@@ -38,7 +38,6 @@ namespace SDiZO_2.Algorithms
         private int currentVertex;
 
         private Graph graph;
-        private GraphHeap heap;
 
         public ShortestPathDijkstra(Graph graph, bool mode, int startVertex = 0)
         {
@@ -170,5 +169,4 @@ namespace SDiZO_2.Algorithms
             return total.ToString();
         }
     }
-
 }

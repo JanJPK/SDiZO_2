@@ -101,10 +101,7 @@ namespace SDiZO_2.Algorithms
         // Praca.
         public void Work()
         {
-            int[] currentEdge;
-            // currentEdge - minitablica którymi posługuje się kopiec.
-            // [0] - początkowy wierzchołek.
-            // [1] - końcowy wierzchołek.
+            Edge currentEdge;
             // Tak długo aż nie wypełnisz całej tablicy:
             for (int i = 0; i < parentVertexes.Length;)
             {
@@ -112,15 +109,15 @@ namespace SDiZO_2.Algorithms
                 currentEdge = heap.Pop();
                 // Pobierz wartość z początku kolejki.
 
-                while (kruskalSet.FindSet(currentEdge[0]) == kruskalSet.FindSet(currentEdge[1]))
+                while (kruskalSet.FindSet(currentEdge.Start) == kruskalSet.FindSet(currentEdge.End))
                 {
                     currentEdge = heap.Pop();
                 }
 
-                includedVertexes[currentEdge[1]] = true;
-                includedVertexes[currentEdge[0]] = true;
-                parentVertexes[i] = currentEdge[0];
-                childVertexes[i] = currentEdge[1];
+                includedVertexes[currentEdge.End] = true;
+                includedVertexes[currentEdge.Start] = true;
+                parentVertexes[i] = currentEdge.Start;
+                childVertexes[i] = currentEdge.End;
                 kruskalSet.UnionSets(currentEdge);
                 i++;
 
@@ -191,13 +188,13 @@ namespace SDiZO_2.Algorithms
         }
 
         // Połącz dwa zbiory.
-        public void UnionSets(int[] edge)
+        public void UnionSets(Edge edge)
         {
             int set1, set2;
 
             // Znajdujemy zbiory danych wierzchołków.
-            set1 = FindSet(edge[0]); 
-            set2 = FindSet(edge[1]);
+            set1 = FindSet(edge.Start); 
+            set2 = FindSet(edge.End);
 
             if (set1 != set2)
             {
